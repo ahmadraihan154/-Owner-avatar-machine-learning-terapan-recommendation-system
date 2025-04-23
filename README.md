@@ -175,13 +175,13 @@ Penyesuaian tipe data ini penting dilakukan agar proses *join* antar dataframe d
 
 ## 3.3 EDA - Univariate Analysis
 
-### a. Menghitung total data unik dari dataset movies dan ratings
+### 3.3.1. Menghitung total data unik dari dataset movies dan ratings
 
 ![image](https://github.com/user-attachments/assets/9d1079d0-3824-432f-8e8f-ff8c6b101f02)
 
 Dari hasil di atas, terdapat 45.436 film pada dataset `movies`, dengan 9.066 film yang memiliki rating dan 671 pengguna yang memberikan rating pada dataset `ratings_small`.
 
-### b. Melihat Informasi statistik dari dataset movies dan ratings
+### 3.3.2. Melihat Informasi statistik dari dataset movies dan ratings
 
 Informasi statistik dari dataset movies dan ratings disajikan pada tabel dibawah:
 
@@ -215,7 +215,7 @@ Insight dari Ratings :
   - Rating menunjukkan bahwa sebagian besar rating yang diberikan adalah 3 hingga 5.
   - Timestamp menunjukkan waktu ketika rating diberikan. Nilai timestamp yang tinggi menunjukkan data yang lebih baru, sementara nilai timestamp yang lebih rendah menunjukkan data yang lebih lama. Timestamp dicatat dalam bentuk waktu UNIX.
 
-### c. Visualisasi Distribusi Rating Film
+### 3.3.3. Visualisasi Distribusi Rating Film
 
 ![Untitled](https://github.com/user-attachments/assets/70859746-06a5-40ea-b400-f5f810327d09)
 
@@ -224,7 +224,7 @@ Insight yang didapatkan dari barchart diatas adalah :
 - **Rating 3** menyusul dengan persentase **20.06%**, diikuti oleh **rating 5** yang mencapai **15.09%**. Ini menunjukkan bahwa mayoritas film dinilai berada dalam kategori biasa hingga sangat baik.
 - **Rating 0.5** hanya diberikan oleh **1.10%** pengguna, menandakan bahwa hanya sedikit film yang dianggap sangat buruk oleh penonton.
 
-### d. Visualisasi Distribusi Genre dalam Film
+### 3.3.4. Visualisasi Distribusi Genre dalam Film
 
 ![Untitled](https://github.com/user-attachments/assets/96213cfc-9cf4-4c89-8417-e379edfc0f3f)
 
@@ -330,18 +330,153 @@ Proses ini bertujuan untuk mempermudah pemanfaatan data genre dalam pembuatan mo
 | 949     | [Action, Crime, Drama, Thriller]     | Heat  | 242    | 5.0    |
 | 949     | [Action, Crime, Drama, Thriller]     | Heat  | 263    | 3.0    |
 
-### 4.1.5 
+### 4.1.5. Mengatasi Nilai yang Missing
+Pada tahap sebelumnya, setelah fitur `genres` diubah menjadi list of genre names, ditemukan adanya beberapa nilai yang hilang (missing) pada kolom tersebut. Hal ini bisa terjadi karena beberapa film tidak memiliki genre yang tercantum atau karena ketidaksempurnaan dalam data.
 
-
-
+Untuk menjaga kualitas data yang akan digunakan dalam pembangunan model sistem rekomendasi, nilai-nilai yang missing tersebut diatasi dengan cara menghapus baris-baris yang bersangkutan. Langkah ini penting agar model tidak terdampak oleh data yang tidak lengkap atau tidak relevan.
 
 ## 4.2 Data Preparation Khusus untuk Content-Based Filtering
 Setelah melalui proses data preparation umum, tahap selanjutnya difokuskan pada pengolahan data yang relevan dengan pendekatan content-based filtering. Fokus utama pada bagian ini adalah mengekstraksi dan mempersiapkan informasi konten dari film yang akan digunakan untuk menghitung kesamaan antar item. Adapun tahapannya adalah sebagai berikut:
 
-### 4.2.1 
+### 4.2.1 Mengatasi Data yang Duplikat
+Setelah proses penggabungan DataFrame di tahapan data preparation umum, ditemukan adanya data duplikat. Hal ini wajar terjadi karena satu film dapat diberi rating oleh banyak pengguna, sehingga terdapat beberapa baris dengan `movieId` yang sama namun `userId` dan `rating` yang berbeda.
+
+Namun, untuk keperluan **content-based filtering**, fokus utama adalah pada informasi unik dari setiap film. Oleh karena itu, duplikasi tersebut perlu dihapus agar tidak mempengaruhi representasi fitur film.
+
+Penghapusan dilakukan menggunakan fungsi `drop_duplicates()`, yang menghasilkan pengurangan jumlah baris dari **44.792 baris menjadi 2.800 baris**, sementara jumlah kolom tetap **5 kolom**.
+
+### 4.2.2 Pemilihan Fitur yang Relevan
+
+**Content-Based Filtering berfokus pada karakteristik item**, dalam hal ini adalah film. Oleh karena itu, hanya fitur-fitur yang merepresentasikan konten film yang akan digunakan. Fitur yang dipilih antara lain: **`movieId`**, **`title`**, dan **`genres`**, karena ketiganya dapat menggambarkan isi atau kategori dari masing-masing film.
+
+Sementara itu, fitur seperti **`userId`** dan **`rating`** tidak digunakan pada tahap ini, karena pendekatan content-based tidak mempertimbangkan preferensi pengguna secara langsung, melainkan lebih fokus pada kesamaan antar item (film).
+
+| movieId | genres                                | title                  |
+|---------|----------------------------------------|------------------------|
+| 949     | [Action, Crime, Drama, Thriller]       | Heat                   |
+| 710     | [Adventure, Action, Thriller]          | GoldenEye              |
+| 1408    | [Action, Adventure]                    | Cutthroat Island       |
+| 524     | [Drama, Crime]                         | Casino                 |
+| 4584    | [Drama, Romance]                       | Sense and Sensibility  |
+
+### 4.2.3 Ekstraksi Fitur Teks dari Kolom Genre
+Tahap ini menggunakan teknik **TF-IDF (Term Frequency Inverse Document Frequency)** untuk mengubah isi kolom `genres` menjadi representasi numerik berbasis teks. Representasi ini membantu sistem mengenali kemiripan antar film berdasarkan kesamaan genre yang dimiliki.
+
+Sebelum menerapkan `TfidfVectorizer`, data pada kolom `genres` perlu dikonversi dari format list menjadi string. Hal ini dilakukan karena `TfidfVectorizer` hanya dapat memproses input dalam bentuk teks (string), bukan dalam bentuk list atau array.
+
+Adapun hasil akhir dari ektraksi fitur dengan TF-IDF dapat dilihat pada tabel dibawah:
+
+| Title                  | Action  | Adventure | Animation | Comedy | Crime   | Documentary | Drama   | Family | Fantasy | Fiction | ... | Horror | Movie | Music | Mystery | Romance | Science | Thriller | TV  | War | Western |
+|------------------------|---------|-----------|-----------|--------|---------|-------------|---------|--------|---------|---------|-----|--------|-------|--------|----------|---------|---------|----------|-----|-----|---------|
+| Heat                   | 0.5445  | 0.0000    | 0.0       | 0.0000 | 0.5899  | 0.0         | 0.3299  | 0.0    | 0.0000  | 0.0000  | ... | 0.0000 | 0.0   | 0.0    | 0.0      | 0.0000  | 0.0000  | 0.4967   | 0.0 | 0.0 | 0.0     |
+| GoldenEye              | 0.5619  | 0.6492    | 0.0       | 0.0000 | 0.0000  | 0.0         | 0.0000  | 0.0    | 0.0000  | 0.0000  | ... | 0.0000 | 0.0   | 0.0    | 0.0      | 0.0000  | 0.0000  | 0.5126   | 0.0 | 0.0 | 0.0     |
+| Cutthroat Island       | 0.6544  | 0.7561    | 0.0       | 0.0000 | 0.0000  | 0.0         | 0.0000  | 0.0    | 0.0000  | 0.0000  | ... | 0.0000 | 0.0   | 0.0    | 0.0      | 0.0000  | 0.0000  | 0.0000   | 0.0 | 0.0 | 0.0     |
+| Casino                 | 0.0000  | 0.0000    | 0.0       | 0.0000 | 0.8728  | 0.0         | 0.4881  | 0.0    | 0.0000  | 0.0000  | ... | 0.0000 | 0.0   | 0.0    | 0.0      | 0.0000  | 0.0000  | 0.0000   | 0.0 | 0.0 | 0.0     |
+| Sense and Sensibility | 0.0000  | 0.0000    | 0.0       | 0.0000 | 0.0000  | 0.0         | 0.5161  | 0.0    | 0.0000  | 0.0000  | ... | 0.0000 | 0.0   | 0.0    | 0.0      | 0.8565  | 0.0000  | 0.0000   | 0.0 | 0.0 | 0.0     |
 
 ## 4.3 Data Preparation Khusus untuk Collaborative Filtering
 Setelah proses data preparation umum dilakukan, tahap selanjutnya mengarah pada persiapan data yang akan digunakan dalam pendekatan collaborative filtering. Di sini, fokusnya adalah pada interaksi pengguna dan item yang akan dianalisis untuk membangun sistem rekomendasi berbasis perilaku pengguna. Adapun tahapannya adalah sebagai berikut:
+
+### 4.3.1 Pemilihan Fitur yang Relevan
+**Karena pendekatan Collaborative Filtering berfokus pada pola interaksi antara pengguna dan item (film)**, maka fitur yang dipilih terbatas pada `userId`, `movieId`, dan `rating`. Ketiga fitur ini merepresentasikan hubungan eksplisit yang terjadi antara pengguna dan film melalui rating yang diberikan.
+
+Fitur lain seperti `title` dan `genres` tidak digunakan dalam pendekatan ini karena informasi konten dari film tidak dibutuhkan untuk membangun model collaborative filtering. Model hanya mempelajari pola interaksi dari data rating antar pengguna. Setelah proses pemilihan fitur ini, dataset yang awalnya terdiri dari **44.792 baris dan 5 kolom** menjadi **44.792 baris dan 3 kolom**.
+
+| userId | movieId | rating |
+|--------|---------|--------|
+| 1      | 2105    | 4.0    |
+| 1      | 1405    | 1.0    |
+| 1      | 2455    | 2.5    |
+| 1      | 2294    | 2.0    |
+| 1      | 2193    | 2.0    |
+
+### 4.3.2 Melakukan Encoding pada Kolom `userId` dan `movieId`
+Karena model deep learning hanya dapat memproses input dalam bentuk numerik, maka kolom `userId` dan `movieId` perlu diubah menjadi bentuk numerik yang terurut (jika belum dalam format tersebut). Proses ini dilakukan dengan teknik encoding, seperti Label Encoding atau penyesuaian indexing, untuk memastikan setiap pengguna dan film direpresentasikan dengan ID numerik yang unik dan konsisten.
+
+Data Summary :
+- **Jumlah Pengguna**: 671
+- **Jumlah Film**: 2800
+- **Rating Minimum**: 0.5
+- **Rating Maksimum**: 5.0
+
+| userId | movieId | rating | user | movie |
+|--------|---------|--------|------|-------|
+| 11376  | 1       | 4.0    | 0    | 1071  |
+| 27973  | 1       | 1.0    | 0    | 725   |
+| 31731  | 1       | 2.5    | 0    | 1201  |
+| 18245  | 1       | 2.0    | 0    | 1158  |
+| 13727  | 1       | 2.0    | 0    | 1121  |
+
+Dapat dilihat bahwa data ini memiliki 671 pengguna, 2800 film, dengan rating minimum 0.5 dan rating maksimum 5.0.
+
+### 4.3.3 Normalisasi Data
+Karena pendekatan **Collaborative Filtering** berfokus pada pola interaksi pengguna dengan item (film), perlu dilakukan normalisasi data agar sistem dapat mengenali dan memproses perbedaan skala dalam rating yang diberikan oleh pengguna.  Dalam hal ini, normalisasi bertujuan untuk memastikan bahwa rating yang diberikan oleh pengguna memiliki skala yang konsisten, memungkinkan model deep learning untuk memproses data dengan lebih efektif dan efisien. Setelah normalisasi, data akan siap digunakan untuk pelatihan model deep learning yang akan mendeteksi pola perilaku pengguna dalam memberikan rating film.
+
+### 4.3.4 Pemisahan Data
+Setelah tahap persiapan data, data kemudian dipisahkan menjadi tiga subset berdasarkan proporsi yang telah ditentukan: 80% untuk data pelatihan (training), 10% untuk data validasi (validation), dan 10% untuk data pengujian (testing).
+  
+Pembagian ini dilakukan untuk memastikan model dapat dilatih dengan data yang cukup, diuji dengan data yang belum pernah dilihat, dan dievaluasi dengan data yang terpisah dari proses pelatihan. Hal ini membantu mengurangi overfitting dan memastikan performa model yang lebih general.
+
+**Setelah pemisahan data**, jumlah data yang tersedia adalah sebagai berikut:
+  - **Jumlah data untuk pelatihan:** 35,833
+  - **Jumlah data untuk validasi:** 4,479
+  - **Jumlah data untuk pengujian:** 4,480
+
+# 5. Modeling and Result
+## 5.1 Content - Based Filtering
+**Content-Based Filtering** merupakan pendekatan sistem rekomendasi yang menyarankan item kepada pengguna berdasarkan karakteristik atau fitur dari item itu sendiri, tanpa memperhitungkan interaksi antar pengguna. Dalam konteks rekomendasi film, fitur yang digunakan bisa berupa genre, sinopsis, aktor, sutradara, dan lain sebagainya. 
+
+Untuk mengukur kesamaan antar item (dalam hal ini film), digunakan teknik berbasis teks seperti **Cosine Similarity**. Teknik ini sangat berguna ketika fitur yang digunakan adalah teks, seperti genre yang telah diproses menjadi representasi numerik melalui **TF-IDF (Term Frequency - Inverse Document Frequency)**. Cosine Similarity mengukur seberapa mirip dua vektor dalam ruang multidimensi dengan menghitung sudut antara keduanya. Vektor yang arahnya semakin mendekati satu sama lain (sudutnya kecil) dianggap lebih mirip.
+
+#### Rumus Cosine Similarity:
+
+\[
+\text{Cosine Similarity}(A, B) = \frac{A \cdot B}{\|A\| \cdot \|B\|} = \frac{\sum_{i=1}^{n} A_i \times B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \times \sqrt{\sum_{i=1}^{n} B_i^2}}
+\]
+
+- Nilai cosine similarity berkisar antara 0 hingga 1:
+  - **1** → Sangat mirip (arah vektor sama)
+  - **0** → Tidak mirip sama sekali (arah tegak lurus)
+
+Adapun kelebihan dan kekurangan content-Based Filtering adalah
+
+**Kelebihan**:
+- Rekomendasi lebih personal karena berbasis pada histori pengguna.
+- Tidak membutuhkan data dari pengguna lain.
+- Cocok untuk pengguna baru yang baru memberikan beberapa rating (*user cold start*).
+
+**Kekurangan**:
+- Tidak bisa merekomendasikan item baru yang belum memiliki fitur konten yang jelas (*item cold start*).
+- Rekomendasi cenderung monoton karena sangat mirip dengan preferensi sebelumnya.
+- Tidak mempertimbangkan komunitas atau tren dari pengguna lain.
+
+Pada proyek ini, **Content-Based Filtering** diimplementasikan menggunakan **Cosine Similarity** dengan hasilnya dapat dilihat dibawah.
+
+**Langkah pertama : Menghitung Cosine Similarity antar Item**
+
+![image](https://github.com/user-attachments/assets/a742c4b6-4b6e-4dde-aef5-f62d7e29f3a1)
+
+**Langkah kedua : Membuat Mapping antara hasil cosine similarity dan item**
+
+![image](https://github.com/user-attachments/assets/62f9000b-69bc-4204-9004-f9a9698754b0)
+
+**Langkah Ketiga : Membuat fungsi rekomendasi film berdasarkan kemiripan genre dengan menerapkan fungsi Top-N rekokemendasi serta menguji dan mengevaluasi model yang dibuat**
+
+Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dilakukan pencarian dengan film yang mirip dari judul yaitu **The Man with the Golden Arm**
+
+![image](https://github.com/user-attachments/assets/e251d0e6-f98b-450b-b229-fa3f817e2321)
+
+Hasilnya terlihat  beberapa film yang ditampilkan memiliki genre yang sama.
+
+
+
+
+
+
+
+
+
+
 
 
 
