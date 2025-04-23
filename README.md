@@ -609,7 +609,7 @@ Kembali ke proyek yang dikerjakan, berdasarkan perhitungan yang dilakukan terhad
 ![Untitled-1](https://github.com/user-attachments/assets/fcbbbc21-fbdc-4270-9fa8-d4cf0f985dda)
 
 Insight yang didapatkan dari kedua grafik diatas adalah:
-  - Berdasarkan hasil evaluasi menggunakan metrik Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE), model menunjukkan performa yang cukup baik. Setelah 5 epoch pelatihan, nilai MAE pada data pelatihan mencapai sekitar 0.138, sedangkan pada data validasi sebesar 0.155. Begitu pula dengan RMSE yang menunjukkan 0.1538 pada data pelatihan dan sekitar 0.2 pada data validasi. 
+  - Berdasarkan hasil evaluasi menggunakan metrik Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE), model menunjukkan performa yang cukup baik. Setelah 5 epoch pelatihan, nilai MAE pada data pelatihan mencapai sekitar 0.138, sedangkan pada data validasi sebesar 0.155. Begitu pula dengan RMSE yang menunjukkan 0.1538 pada data pelatihan dan sekitar 0.20 pada data validasi. 
 
   - Performa ini menunjukkan bahwa model cukup efektif dalam menangkap pola interaksi antara pengguna dan item (film). Error yang rendah berarti rekomendasi yang dihasilkan lebih dekat dengan rating yang seharusnya diberikan oleh pengguna, sehingga meningkatkan relevansi rekomendasi. Hal ini dapat berdampak positif terhadap pengalaman pengguna secara keseluruhan, karena sistem akan lebih sering merekomendasikan film yang sesuai dengan selera pengguna berdasarkan historis interaksinya.
 
@@ -625,7 +625,7 @@ Pengolahan data dilakukan secara sistematis melalui tahapan umum, dilanjutkan de
 Dengan menggunakan metode **Content-Based Filtering** berbasis **Cosine Similarity**, sistem mampu memberikan **10 rekomendasi film** kepada pengguna berdasarkan kemiripan genre film yang disukai sebelumnya, dengan nilai **precision sebesar 100.00%**.
 
 ### 3. Rekomendasi Berdasarkan Preferensi Pengguna Lain (Collaborative Filtering)  
-Penggunaan model **Deep Learning Collaborative Filtering** memberikan hasil rekomendasi yang lebih akurat dan relevan bagi pengguna. Hal ini dibuktikan dengan hasil pelatihan yang memperoleh nilai **mean absolute error (MAE) sebesar 0.1381** dan **root mean squared error (RMSE) sebesar 0.1788**, serta pada data validasi mencapai **MAE sebesar 0.1538** dan **RMSE sekitar 0.2** pada epoch ke-5.
+Penggunaan model **Deep Learning Collaborative Filtering** memberikan hasil rekomendasi yang lebih akurat dan relevan bagi pengguna. Hal ini dibuktikan dengan hasil pelatihan yang memperoleh nilai **mean absolute error (MAE) sebesar 0.1381** dan **root mean squared error (RMSE) sebesar 0.1788**, serta pada data validasi mencapai **MAE sebesar 0.1538** dan **RMSE sekitar 0.20** pada epoch ke-5.
 
 ### 6.3.2 Efektivitas Solusi yang Diterapkan
 - Adapun efektivitas Setiap langkah dalam solution statement terhadap hasil akhir:
