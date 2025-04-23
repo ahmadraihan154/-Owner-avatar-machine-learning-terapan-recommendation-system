@@ -215,6 +215,142 @@ Insight dari Ratings :
   - Rating menunjukkan bahwa sebagian besar rating yang diberikan adalah 3 hingga 5.
   - Timestamp menunjukkan waktu ketika rating diberikan. Nilai timestamp yang tinggi menunjukkan data yang lebih baru, sementara nilai timestamp yang lebih rendah menunjukkan data yang lebih lama. Timestamp dicatat dalam bentuk waktu UNIX.
 
+### c. Visualisasi Distribusi Rating Film
+
+![Untitled](https://github.com/user-attachments/assets/70859746-06a5-40ea-b400-f5f810327d09)
+
+Insight yang didapatkan dari barchart diatas adalah :
+- **Rating 4** adalah rating yang paling banyak diberikan oleh pengguna, dengan persentase tertinggi sebesar **28.75%**. Hal ini menunjukkan bahwa sebagian besar pengguna cenderung memberikan penilaian positif terhadap film yang mereka tonton.
+- **Rating 3** menyusul dengan persentase **20.06%**, diikuti oleh **rating 5** yang mencapai **15.09%**. Ini menunjukkan bahwa mayoritas film dinilai berada dalam kategori biasa hingga sangat baik.
+- **Rating 0.5** hanya diberikan oleh **1.10%** pengguna, menandakan bahwa hanya sedikit film yang dianggap sangat buruk oleh penonton.
+
+### d. Visualisasi Distribusi Genre dalam Film
+
+![Untitled](https://github.com/user-attachments/assets/96213cfc-9cf4-4c89-8417-e379edfc0f3f)
+
+Insight yang didapatkan dari barchart diatas adalah:
+  - Genre Drama menjadi genre yang paling sering muncul dengan lebih dari 20.000 kemunculan pada film, diikuti oleh Comedy sekitar 13.000. Ini menunjukkan bahwa banyak film mengandung unsur cerita emosional dan humor, dua genre yang populer di kalangan penonton.
+  
+  - Perlu dicatat bahwa satu film bisa memiliki lebih dari satu genre. Oleh karena itu, angka ini tidak menunjukkan jumlah film unik, melainkan jumlah total kemunculan genre dalam seluruh dataset film.
+
+  - Beberapa "genre" seperti Carousel Productions, Aniplex, dan lainnya sebenarnya bukan genre, melainkan nama perusahaan produksi. Ini kemungkinan besar disebabkan oleh data yang belum dibersihkan atau salah kategorisasi. Ini menjadi sinyal bahwa perlu dilakukan data cleaning untuk memisahkan genre dari entitas lainnya seperti studio atau produser.
+
+### e. Analisis Rating dan Vote dari Masing-Masing Film
+| Title                          | User Rating Mean | TMDb/IMDb Mean Rating | Total Vote |
+|-------------------------------|------------------|------------------------|------------|
+| Terminator 3: Rise of the Machines | 4.26             | 5.90                   | 324        |
+| The Million Dollar Hotel       | 4.49             | 5.90                   | 311        |
+| Solaris                        | 4.13             | 7.69                   | 305        |
+| The 39 Steps                   | 4.22             | 7.40                   | 291        |
+| Monsoon Wedding                | 3.71             | 6.80                   | 274        |
+| Once Were Warriors             | 4.30             | 7.60                   | 244        |
+| Three Colors: Red              | 3.95             | 7.80                   | 228        |
+| Men in Black II               | 4.26             | 6.10                   | 224        |
+| The Passion of Joan of Arc     | 3.48             | 8.20                   | 218        |
+| Silent Hill                    | 3.67             | 6.30                   | 215        |
+
+Insight yang dapat diberikan:
+- Berdasarkan 10 film dengan total vote terbanyak:
+  - *Terminator 3: Rise of the Machines* menjadi film dengan jumlah vote terbanyak (324 vote), dengan rata-rata rating dari pengguna sebesar 4.26 dan rating 5.9 dari TMDb/IMDb.
+  
+  - Terdapat selisih penilaian antara komunitas pengguna dan TMDb/IMDb pada beberapa film, misalnya:
+    - *The Million Dollar Hotel*: user rating 4.49 vs TMDb/IMDb rating 5.9.
+    - *The Passion of Joan of Arc*: user rating 3.48 vs TMDb/IMDb rating 8.2.
+  
+  - Hal ini menunjukkan bahwa preferensi pengguna yang memberikan rating bisa berbeda signifikan dibandingkan agregat rating dari platform lain seperti TMDb atau IMDb, baik karena demografi, ekspektasi, maupun persepsi terhadap film tertentu.
+
+![Untitled](https://github.com/user-attachments/assets/45ce12fc-8603-42e6-b406-1277204c807c)
+
+Insight yang didapatkan dari kedua scatterplot diatas adalah
+
+  - Dari kedua grafik, terlihat bahwa film dengan rating menengah hingga tinggi (sekitar 6–8 di TMDB/IMDB dan 3–4 di user rating) cenderung mendapatkan jumlah vote yang lebih banyak.
+
+  - Sedangkan film dengan rating sangat rendah atau sangat tinggi cenderung memiliki jumlah vote yang lebih sedikit dimana ini bisa terjadi karena film tersebut kurang populer atau hanya menarik bagi segmen tertentu.
+
+  - Meskipun rentang rating TMDb/IMDb lebih luas (0–10) dan user rating lebih sempit (0-5), keduanya memperlihatkan tren serupa: film dengan rating ekstrem (terlalu rendah atau terlalu tinggi) justru cenderung mendapatkan vote lebih sedikit dibandingkan film dengan rating moderat.
+
+# 4. Data Preparation
+Sebelum membangun sistem rekomendasi, tahap data preparation sangat penting dilakukan untuk memastikan bahwa data yang digunakan telah bersih, konsisten, dan siap untuk dianalisis lebih lanjut. Dalam proyek ini, proses data preparation dibagi ke dalam tiga tahapan utama, yaitu:
+
+## 4.1 Data Preparation Umum
+Pada tahap ini, dilakukan penyesuaian data secara menyeluruh yang berlaku untuk kedua pendekatan sistem rekomendasi, baik content-based filtering maupun collaborative filtering. Adapun tahapannya adalah sebagai berikut:
+
+### 4.1.1 Pemilihan Fitur yang Relevan
+Pada tahap ini, dilakukan seleksi fitur dari kedua dataset untuk memastikan hanya data yang relevan yang digunakan dalam proses selanjutnya:
+    - Dari dataframe movies, fitur yang dipilih adalah id, genres, dan title, karena ketiganya memiliki peran penting dalam proses pencocokan konten dan identifikasi film.
+    - Dari dataframe ratings_small, seluruh fitur akan digunakan kecuali timestamp, yang dihapus karena tidak berkontribusi langsung terhadap pembuatan sistem rekomendasi.
+
+| id    | genres                                                                 | title                           |
+|-------|------------------------------------------------------------------------|---------------------------------|
+| 862   | [{'id': 16, 'name': 'Animation'}, {'id': 35, 'name': 'Comedy'}]         | Toy Story                       |
+| 8844  | [{'id': 12, 'name': 'Adventure'}, {'id': 14, 'name': 'Fantasy'}]        | Jumanji                         |
+| 15602 | [{'id': 10749, 'name': 'Romance'}, {'id': 35, 'name': 'Comedy'}]        | Grumpier Old Men                |
+| 31357 | [{'id': 35, 'name': 'Comedy'}, {'id': 18, 'name': 'Drama'}]             | Waiting to Exhale               |
+| 11862 | [{'id': 35, 'name': 'Comedy'}]                                          | Father of the Bride Part II     |
+
+| userId | movieId | rating |
+|--------|---------|--------|
+| 1      | 31      | 2.5    |
+| 1      | 1029    | 3.0    |
+| 1      | 1061    | 3.0    |
+| 1      | 1129    | 2.0    |
+| 1      | 1172    | 4.0    |
+
+### 4.1.2 Penyesuaian Nama dan Tipe Data
+Berdasarkan hasil pengecekan EDA, perlu dilakukan **penyesuaian tipe data pada kolom `id` di dataframe `movies` agar konsisten dengan tipe data `int64` pada kolom `movieId` di dataframe `ratings_small`**.
+
+Setelah penyesuaian tipe data, nama kolom `id` pada dataframe `movies` perlu diubah menjadi `movieId` agar proses penggabungan (join) antar dataframe dapat dilakukan dengan benar.
+
+### 4.1.3. Mengonversi Fitur Genre menjadi Format yang Terstruktur
+
+Pada tahap ini, kolom `genres` yang awalnya berisi data dalam bentuk list of dictionaries diubah menjadi format yang lebih terstruktur, yaitu **list of genre names**. Hal ini dilakukan agar data lebih mudah dianalisis dan diproses untuk keperluan rekomendasi.
+
+Selanjutnya, **list kosong pada kolom `genres` diubah menjadi NaN** untuk memudahkan identifikasi dan penanganan baris yang tidak memiliki genre. Langkah ini penting untuk memastikan bahwa data yang tidak relevan dapat dihapus atau ditangani dengan tepat selama analisis lebih lanjut.
+
+Proses ini bertujuan untuk mempermudah pemanfaatan data genre dalam pembuatan model rekomendasi yang lebih efisien dan akurat.
+
+| movieId | genres                        | title                         |
+|---------|-------------------------------|-------------------------------|
+| 862     | [Animation, Comedy, Family]    | Toy Story                     |
+| 8844    | [Adventure, Fantasy, Family]   | Jumanji                       |
+| 15602   | [Romance, Comedy]              | Grumpier Old Men              |
+| 31357   | [Comedy, Drama, Romance]       | Waiting to Exhale             |
+| 11862   | [Comedy]                       | Father of the Bride Part II   |
+
+### 4.1.4. Menggabungkan DataFrame Movies dan Ratings_small
+- Pada tahap ini, setelah dilakukan penyesuaian pada DataFrame movies dan ratings_small, dilakukan penggabungan (join) antara DataFrame movies dan ratings_small.
+
+- Tujuan dari penggabungan ini adalah untuk mengaitkan setiap film dengan rating yang diberikan oleh pengguna, sehingga informasi mengenai rating film dapat disertakan dalam analisis lebih lanjut.
+
+| movieId | genres                               | title | userId | rating |
+|---------|--------------------------------------|-------|--------|--------|
+| 949     | [Action, Crime, Drama, Thriller]     | Heat  | 23     | 3.5    |
+| 949     | [Action, Crime, Drama, Thriller]     | Heat  | 102    | 4.0    |
+| 949     | [Action, Crime, Drama, Thriller]     | Heat  | 232    | 2.0    |
+| 949     | [Action, Crime, Drama, Thriller]     | Heat  | 242    | 5.0    |
+| 949     | [Action, Crime, Drama, Thriller]     | Heat  | 263    | 3.0    |
+
+### 4.1.5 
+
+
+
+
+## 4.2 Data Preparation Khusus untuk Content-Based Filtering
+Setelah melalui proses data preparation umum, tahap selanjutnya difokuskan pada pengolahan data yang relevan dengan pendekatan content-based filtering. Fokus utama pada bagian ini adalah mengekstraksi dan mempersiapkan informasi konten dari film yang akan digunakan untuk menghitung kesamaan antar item. Adapun tahapannya adalah sebagai berikut:
+
+### 4.2.1 
+
+## 4.3 Data Preparation Khusus untuk Collaborative Filtering
+Setelah proses data preparation umum dilakukan, tahap selanjutnya mengarah pada persiapan data yang akan digunakan dalam pendekatan collaborative filtering. Di sini, fokusnya adalah pada interaksi pengguna dan item yang akan dianalisis untuk membangun sistem rekomendasi berbasis perilaku pengguna. Adapun tahapannya adalah sebagai berikut:
+
+
+
+
+
+
+
+
+
 
 
 
