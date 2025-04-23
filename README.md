@@ -410,7 +410,7 @@ Data Summary :
 Dapat dilihat bahwa data ini memiliki 671 pengguna, 2800 film, dengan rating minimum 0.5 dan rating maksimum 5.0.
 
 ### 4.3.3 Normalisasi Data
-Karena pendekatan **Collaborative Filtering** berfokus pada pola interaksi pengguna dengan item (film), perlu dilakukan normalisasi data agar sistem dapat mengenali dan memproses perbedaan skala dalam rating yang diberikan oleh pengguna.  Dalam hal ini, normalisasi bertujuan untuk memastikan bahwa rating yang diberikan oleh pengguna memiliki skala yang konsisten, memungkinkan model deep learning untuk memproses data dengan lebih efektif dan efisien. Setelah normalisasi, data akan siap digunakan untuk pelatihan model deep learning yang akan mendeteksi pola perilaku pengguna dalam memberikan rating film.
+Karena pendekatan **Collaborative Filtering** berfokus pada pola interaksi antara pengguna dan item (film), penting untuk melakukan **normalisasi data** sebelum melatih model. Normalisasi membantu menyamakan skala nilai rating yang diberikan oleh pengguna, sehingga model **deep learning** dapat lebih efektif dalam mendeteksi pola. Dalam hal ini, rating awal yang berada dalam rentang **0.5 hingga 5.0** dinormalisasi menjadi skala **0 hingga 1**. Proses ini dilakukan agar model dapat memproses input numerik secara lebih cepat dan efisien saat proses pelatihan model.
 
 ### 4.3.4 Pemisahan Data
 Setelah tahap persiapan data, data kemudian dipisahkan menjadi tiga subset berdasarkan proporsi yang telah ditentukan: 80% untuk data pelatihan (training), 10% untuk data validasi (validation), dan 10% untuk data pengujian (testing).
