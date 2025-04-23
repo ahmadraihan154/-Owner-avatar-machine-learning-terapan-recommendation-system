@@ -9,11 +9,13 @@
 ## Latar Belakang
 ![10-Rekomendasi-Film-Teknologi-dan-Artificial-Intelligence-yang-Seru-dan-Keren](https://github.com/user-attachments/assets/e1350004-1a98-4b60-9569-c04d77a2c99b)
 
-Perkembangan industri perfilman di dunia sangat pesat, ditandai dengan meningkatnya jumlah film yang dirilis setiap tahunnya. Platform seperti IMDb telah lama digunakan untuk menyajikan informasi serta menjadi tempat berbagi opini antar penikmat film di seluruh dunia. Tanggapan dan ulasan dari pengguna di IMDb seringkali dijadikan tolak ukur kesuksesan sebuah film [[1](https://doi.org/10.52362/jmijayakarta.v2i3.868)].
+Dalam beberapa tahun terakhir, industri hiburan, khususnya perfilman, mengalami pertumbuhan pesat yang didorong oleh kemajuan teknologi dan kemudahan akses digital. Di Indonesia, peningkatan ini terlihat jelas dari melonjaknya jumlah penonton film lokal yang mencapai lebih dari 78 juta pada tahun 2024[[1](https://sisiplus.katadata.co.id/berita/LAINNYA/2259/jumlah-penonton-film-indonesia-tembus-78-juta-terbanyak-sepanjang-sejarah)]. Perkembangan ini menunjukkan bahwa film telah menjadi bagian penting dari gaya hidup masyarakat modern.
 
-Namun, seiring dengan banyaknya judul film yang tersedia, penonton kerap kali mengalami kesulitan dalam memilih film yang ingin mereka tonton. Meskipun IMDb telah menyediakan klasifikasi berdasarkan genre, klasifikasi ini masih terlalu umum dan belum mampu mencerminkan preferensi personal pengguna secara spesifik. Misalnya, penonton yang menyukai film bergenre komedi dengan sedikit sentuhan romansa tentu akan memiliki preferensi yang berbeda dengan penonton yang menyukai komedi dengan unsur aksi. Hal ini menunjukkan perlunya sebuah sistem yang mampu memberikan rekomendasi film secara lebih personal dan relevan. Sistem rekomendasi film merupakan salah satu penerapan *machine learning* yang bertujuan membantu platform layanan streaming digital dalam memberikan informasi kepada pengguna terkait film-film dengan rating terbaik, serta menyarankan film favorit berdasarkan preferensi dan perilaku pengguna [[2](https://doi.org/10.54082/jiki.104)].
+Namun, pertumbuhan tersebut juga membawa tantangan baru, terutama dalam hal penyajian konten yang sesuai dengan preferensi masing-masing pengguna. Banyaknya pilihan film yang tersedia, baik di bioskop maupun platform digital, justru sering kali membuat pengguna kebingungan dalam menentukan tontonan yang paling sesuai dengan selera mereka. Pengguna kerap dihadapkan pada daftar panjang film tanpa informasi yang cukup, yang mengakibatkan waktu pencarian menjadi tidak efisien dan pengalaman menonton kurang memuaskan [[2](	https://doi.org/10.36040/jati.v9i2.13251)].
 
-Berdasarkan latar belakang tersebut, penulis memilih topik ini sebagai studi kasus dalam proyek *machine learning* yang sedang dikembangkan. Diharapkan model ini nantinya dapat berguna dalam memberikan rekomendasi film kepada pengguna secara lebih akurat dan sesuai dengan kebutuhan masing-masing.
+Permasalahan ini semakin penting seiring meningkatnya kebutuhan pengguna akan layanan yang cepat, akurat, dan personal. Di tengah maraknya konten digital, pengguna tidak hanya menginginkan banyak pilihan, tetapi juga mengharapkan kemudahan dalam menemukan konten yang relevan dengan minat dan kebutuhan mereka. Tanpa bantuan yang tepat, proses pencarian film menjadi kurang efektif dan cenderung membuat pengguna melewatkan konten yang sebenarnya sesuai dengan preferensi mereka [[3](https://doi.org/10.25126/jtiik.20231036616)].
+
+Berdasarkan permasalahan yang ditemui, maka diperlukan sebuah sistem yang mampu membantu pengguna dalam menemukan film yang sesuai dengan preferensi mereka secara efisien dan personal. Solusi ini diharapkan dapat mempermudah proses pencarian, menghemat waktu pengguna, serta meningkatkan kepuasan dalam menikmati konten hiburan yang tersedia secara digital.
 
 # 2. Business Understanding
 ![1_nYVObp29l1_9hPNJKhQvGA-1](https://github.com/user-attachments/assets/bc3fc484-02be-40d6-8f9a-570f3d4d9fac)
@@ -424,9 +426,9 @@ Pembagian ini dilakukan untuk memastikan model dapat dilatih dengan data yang cu
 
 # 5. Modeling and Result
 ## 5.1 Content - Based Filtering
-**Content-Based Filtering** merupakan pendekatan sistem rekomendasi yang menyarankan item kepada pengguna berdasarkan karakteristik atau fitur dari item itu sendiri, tanpa memperhitungkan interaksi antar pengguna. Dalam konteks rekomendasi film, fitur yang digunakan bisa berupa genre, sinopsis, aktor, sutradara, dan lain sebagainya. 
+**Content-Based Filtering** merupakan pendekatan sistem rekomendasi yang menyarankan item kepada pengguna berdasarkan karakteristik atau fitur dari item itu sendiri, tanpa memperhitungkan interaksi antar pengguna. Dalam konteks rekomendasi film, fitur yang digunakan bisa berupa genre, sinopsis, aktor, sutradara, dan lain sebagainya [[4](https://doi.org/10.36595/misi.v4i1.250)]. 
 
-Untuk mengukur kesamaan antar item (dalam hal ini film), digunakan teknik berbasis teks seperti **Cosine Similarity**. Teknik ini sangat berguna ketika fitur yang digunakan adalah teks, seperti genre yang telah diproses menjadi representasi numerik melalui **TF-IDF (Term Frequency - Inverse Document Frequency)**. Cosine Similarity mengukur seberapa mirip dua vektor dalam ruang multidimensi dengan menghitung sudut antara keduanya. Vektor yang arahnya semakin mendekati satu sama lain (sudutnya kecil) dianggap lebih mirip.
+Untuk mengukur kesamaan antar item (dalam hal ini film), digunakan teknik berbasis teks seperti **Cosine Similarity**. Teknik ini sangat berguna ketika fitur yang digunakan adalah teks, seperti genre yang telah diproses menjadi representasi numerik melalui **TF-IDF (Term Frequency - Inverse Document Frequency)**. Cosine Similarity mengukur seberapa mirip dua vektor dalam ruang multidimensi dengan menghitung sudut antara keduanya. Vektor yang arahnya semakin mendekati satu sama lain (sudutnya kecil) dianggap lebih mirip [[5](https://doi.org/10.47111/jti.v18i1.12543)].
 
 Adapun kelebihan dan kekurangan content-Based Filtering adalah
 
@@ -460,9 +462,9 @@ Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dil
 Hasilnya terlihat  beberapa film yang ditampilkan memiliki genre yang sama.
 
 ## 5.2 Collaborative Filtering
-**Collaborative Filtering (CF)** adalah pendekatan yang digunakan dalam sistem rekomendasi dengan cara memanfaatkan pola interaksi antara pengguna (*user*) dan item (seperti film, lagu, atau produk). CF tidak memerlukan informasi tambahan tentang item, cukup berdasarkan data historis seperti rating atau perilaku pembelian.
+**Collaborative Filtering (CF)** adalah pendekatan yang digunakan dalam sistem rekomendasi dengan cara memanfaatkan pola interaksi antara pengguna (*user*) dan item (seperti film, lagu, atau produk) [[6](https://doi.org/10.29303/jbegati.v5i1.1193)]. CF tidak memerlukan informasi tambahan tentang item, cukup berdasarkan data historis seperti rating atau perilaku pembelian.
 
-Terdapat dua pendekatan utama:
+Terdapat dua pendekatan utama [[6](https://doi.org/10.29303/jbegati.v5i1.1193)]:
 
 1. **Memory-Based CF**: 
    - Menggunakan teknik seperti *user-user similarity* atau *item-item similarity* berdasarkan rating historis.
@@ -550,7 +552,7 @@ Model ini juga mencakup **bias** untuk setiap pengguna dan film. Bias ini menang
 Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Salah satu metrik evaluasi yang  digunakan dalam sistem rekomendasi **content based filtering** adalah **Precision**.
 
 ### 6.1.1 Precision
-**Precision** adalah ukuran proporsi item relevan di antara semua item yang direkomendasikan oleh sistem. Semakin tinggi nilai precision, maka semakin akurat sistem dalam memberikan rekomendasi yang sesuai dengan preferensi pengguna [[5](https://doi.org/10.1234/jir.v15i2.5678)].
+**Precision** adalah ukuran proporsi item relevan di antara semua item yang direkomendasikan oleh sistem. Semakin tinggi nilai precision, maka semakin akurat sistem dalam memberikan rekomendasi yang sesuai dengan preferensi pengguna [[7](https://doi.org/10.1234/jir.v15i2.5678)].
 
 #### Rumus Precision:
 
@@ -567,7 +569,7 @@ Kembali ke proyek yang dikerjakan, dari hasil evaluasi dengan menggunakan precis
 Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Adapun metrik evaluasi yang digunakan dalam sistem rekomendasi **Collaborative Filtering** adalah **Mean Absolute Error (MAE)** dan **Root Mean Squared Error (RMSE)**. 
 
 ### 6.2.1. **Mean Absolute Error (MAE)**
-**MAE** mengukur rata-rata selisih absolut antara rating yang diprediksi oleh sistem dan rating yang sebenarnya diberikan oleh pengguna. MAE memberikan gambaran yang lebih sederhana tentang seberapa besar kesalahan prediksi rata-rata [[7](10.1109/ICIMCIS48181.2019.8985340)].
+**MAE** mengukur rata-rata selisih absolut antara rating yang diprediksi oleh sistem dan rating yang sebenarnya diberikan oleh pengguna. MAE memberikan gambaran yang lebih sederhana tentang seberapa besar kesalahan prediksi rata-rata [[8](10.1109/ICIMCIS48181.2019.8985340)].
 
 **Rumus MAE**:
 
@@ -584,7 +586,7 @@ Semakin kecil nilai MAE, semakin baik kemampuan sistem dalam memprediksi rating 
 
 ### 6.2.2. **Root Mean Squared Error (RMSE)**
 
-**RMSE** juga mengukur selisih antara rating yang diprediksi dan rating yang sebenarnya, namun RMSE memberi bobot lebih pada kesalahan yang lebih besar dengan cara mengambil akar kuadrat dari perbedaan antara rating aktual dan yang diprediksi. RMSE sangat berguna ketika kita ingin memberi perhatian lebih pada kesalahan prediksi yang lebih besar [[6](https://arxiv.org/abs/1711.01647)].
+**RMSE** juga mengukur selisih antara rating yang diprediksi dan rating yang sebenarnya, namun RMSE memberi bobot lebih pada kesalahan yang lebih besar dengan cara mengambil akar kuadrat dari perbedaan antara rating aktual dan yang diprediksi. RMSE sangat berguna ketika kita ingin memberi perhatian lebih pada kesalahan prediksi yang lebih besar [[7](https://arxiv.org/abs/1711.01647)].
 
 **Rumus RMSE**:
 
@@ -639,13 +641,14 @@ Pendekatan ini memanfaatkan hubungan antar pengguna dalam memberikan rekomendasi
 ---
 
 # Referensi
-1.
-2.
-3.
-4.
-5. 
-6.
-
+1. Katadata. (2024). Jumlah Penonton Film Indonesia Tembus 78 Juta, Terbanyak Sepanjang Sejarah. Diakses dari: https://sisiplus.katadata.co.id/berita/LAINNYA/2259/jumlah-penonton-film-indonesia-tembus-78-juta-terbanyak-sepanjang-sejarah
+2. Velamentosa, D., & Zuliarso, E. (2025). SISTEM REKOMENDASI FILM MENGGUNAKAN METODE CONTENT-BASED FILTERING. JATI (Jurnal Mahasiswa Teknik Informatika), 9(2), 2918-2922.
+3. Ayyiyah, N. M. K., Kusumaningrum, R., & Rismiyati, R. (2023). Film Recommender System Menggunakan Metode Neural Collaborative Filtering. Jurnal Teknologi Informasi Dan Ilmu Komputer, 10(3), 699-708.
+4. Larasati, F. B. A., & Februariyanti, H. (2021). Sistem Rekomendasi Product Emina Cosmetics Dengan Menggunakan Metode Content-Based Filtering. Jurnal Manajemen Informatika Dan Sistem Informasi, 4(1), 45-54.
+5. Priskila, R., Sari, N. N. K., & Putra, P. B. A. A. (2024). Implementasi Content-Based Filtering Menggunakan Tf-Idf and Cosine Similarity Untuk Sistem Rekomendasi Resep Masakan. Jurnal Teknologi Informasi: Jurnal Keilmuan dan Aplikasi Bidang Teknik Informatika, 18(1), 43-51.
+6. Negara, M. S., & Mardiansyah, A. Z. (2024). Implementasi Machine Learning dengan Metode Collaborative Filtering dan Content-Based Filtering pada Aplikasi Mobile Travel (Bangkit Academy). Jurnal Begawe Teknologi Informasi (JBegaTI), 5(1), 126-136.
+7. Kose, A., Kanbak, C., & Evirgen, N. (2017, December). Performance comparison of algorithms for movie rating estimation. In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA) (pp. 955-959). IEEE.
+8. Jonathan, B., Rahim, Z., Barzani, A., & Oktavega, W. (2019, October). Evaluation of mean absolute error in collaborative filtering for sparsity users and items on female daily network. In 2019 International Conference on Informatics, Multimedia, Cyber and Information System (ICIMCIS) (pp. 41-44). IEEE.
 
 
     
