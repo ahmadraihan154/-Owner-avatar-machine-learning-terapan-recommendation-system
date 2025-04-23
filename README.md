@@ -452,6 +452,7 @@ Pada proyek ini, **Content-Based Filtering** diimplementasikan menggunakan **Cos
 
 **Langkah Ketiga : Membuat fungsi rekomendasi film berdasarkan kemiripan genre dengan menerapkan fungsi Top-N rekokemendasi serta menguji dan mengevaluasi model yang dibuat**
 
+### Hasil 
 Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dilakukan pencarian dengan film yang mirip dari judul yaitu **The Man with the Golden Arm**
 
 ![image](https://github.com/user-attachments/assets/e251d0e6-f98b-450b-b229-fa3f817e2321)
@@ -536,14 +537,15 @@ Model ini juga mencakup **bias** untuk setiap pengguna dan film. Bias ini menang
 
 
 ### c. Training Model
-- **Batch Size**: 8
-- **Epochs**: 10
-  
+- **Batch Size**: 32
+- **Epochs**: 5
+
+ ### Hasil 
  Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dilakukan pencarian dengan user 294
  
  ![image](https://github.com/user-attachments/assets/34bea7dc-7a78-4e6b-ab94-f8a3498e1033)
 
- # 6. Evaluation
+# 6. Evaluation
 ## 6.1 Evaluation Content Based Filtering
 Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Salah satu metrik evaluasi yang  digunakan dalam sistem rekomendasi **content based filtering** adalah **Precision**.
 
@@ -575,8 +577,8 @@ $$
 
 Keterangan:
 - \( N \) = jumlah total prediksi
-- \( r_i \) = rating aktual yang diberikan oleh pengguna
-- \( {r}_i^ \) = rating yang diprediksi oleh sistem
+- \( ri \) = rating aktual yang diberikan oleh pengguna
+- \( r^i \) = rating yang diprediksi oleh sistem
 
 Semakin kecil nilai MAE, semakin baik kemampuan sistem dalam memprediksi rating pengguna.
 
@@ -592,25 +594,57 @@ $$
 
 Keterangan:
 - \( N \) = jumlah total prediksi
-- \( r_i \) = rating aktual yang diberikan oleh pengguna
-- \( {r}_i^ \) = rating yang diprediksi oleh sistem
+- \( ri \) = rating aktual yang diberikan oleh pengguna
+- \( {r^i \) = rating yang diprediksi oleh sistem
 
 Semakin kecil nilai RMSE, semakin baik kemampuan sistem dalam memberikan prediksi yang akurat.
 
 ## 6.2.3. Hasil Evaluasi Collaborative Filtering
 Kembali ke proyek yang dikerjakan, berdasarkan perhitungan yang dilakukan terhadap data rekomendasi menggunakan Collaborative Filtering, metrik MAE dan RMSE dihitung untuk mengukur seberapa baik model dalam memprediksi rating yang relevan. Visualisasi dari kedua metrik tersebut dapat dilihat pada gambar di bawah ini:
 
-![Untitled](https://github.com/user-attachments/assets/8e5aa786-866b-4c73-95df-ef54b824e7db)
+![Untitled](https://github.com/user-attachments/assets/7d1822f5-b0ed-4bfc-8d7a-01c2562ea78b)
 
-![Untitled](https://github.com/user-attachments/assets/826472ce-4aed-459c-92ea-b46c3caeaf29)
+![Untitled-1](https://github.com/user-attachments/assets/fcbbbc21-fbdc-4270-9fa8-d4cf0f985dda)
 
+Insight yang didapatkan dari kedua grafik diatas adalah:
+  - Berdasarkan hasil evaluasi menggunakan metrik Mean Absolute Error (MAE) dan Root Mean Squared Error (RMSE), model menunjukkan performa yang cukup baik. Setelah 5 epoch pelatihan, nilai MAE pada data pelatihan mencapai sekitar 0.138, sedangkan pada data validasi sebesar 0.155. Begitu pula dengan RMSE yang menunjukkan penurunan konsisten, dari 0.26 menjadi sekitar 0.198 pada data validasi. 
 
+  - Performa ini menunjukkan bahwa model cukup efektif dalam menangkap pola interaksi antara pengguna dan item (film). Error yang rendah berarti rekomendasi yang dihasilkan lebih dekat dengan rating yang seharusnya diberikan oleh pengguna, sehingga meningkatkan relevansi rekomendasi. Hal ini dapat berdampak positif terhadap pengalaman pengguna secara keseluruhan, karena sistem akan lebih sering merekomendasikan film yang sesuai dengan selera pengguna berdasarkan historis interaksinya.
 
+## 6.3 Kesimpulan Evaluasi: Dampak terhadap Business Understanding
+- Evaluasi dilakukan untuk menilai sejauh mana sistem rekomendasi yang dibangun mampu menjawab problem statement, mencapai goals yang telah ditetapkan, serta membuktikan efektivitas dari solusi yang diterapkan sepanjang proyek.
 
+### 6.3.1 Hubungan Evaluation terhadap Problem Statement dan Goals
+- Adapun sistem yang dikembangkan telah menjawab tiga problem statement dan goalsnya:
+### 1. Pengolahan Data yang Optimal  
+Pengolahan data dilakukan secara sistematis melalui tahapan umum, dilanjutkan dengan penyesuaian khusus untuk pendekatan Content-Based dan Collaborative Filtering, sehingga data siap digunakan untuk membangun sistem rekomendasi yang efektif.
 
+### 2. Rekomendasi Berdasarkan Kemiripan Film (Content-Based)  
+Dengan menggunakan metode **Content-Based Filtering** berbasis **Cosine Similarity**, sistem mampu memberikan **10 rekomendasi film** kepada pengguna berdasarkan kemiripan genre film yang disukai sebelumnya, dengan nilai **precision sebesar 100.00%**.
 
+### 3. Rekomendasi Berdasarkan Preferensi Pengguna Lain (Collaborative Filtering)  
+Penggunaan model **Deep Learning Collaborative Filtering** memberikan hasil rekomendasi yang lebih akurat dan relevan bagi pengguna. Hal ini dibuktikan dengan hasil pelatihan yang memperoleh nilai **mean absolute error (MAE) sebesar 0.1381** dan **root mean squared error (RMSE) sebesar 0.1788**, serta pada data validasi mencapai **MAE sebesar 0.1538** dan **RMSE sebesar 0.1981** pada epoch ke-5.
 
+### 6.3.2 Efektivitas Solusi yang Diterapkan
+- Adapun efektivitas Setiap langkah dalam solution statement terhadap hasil akhir:
+### 1. Exploratory Data Analysis (EDA) dan Data Preparation
+EDA dan data preparation memberikan fondasi penting untuk seluruh proses pemodelan. Dengan memahami struktur data, mengatasi missing values, dan mengubah format data agar sesuai untuk algoritma yang digunakan, kualitas data dapat meningkat. Hal ini secara langsung memengaruhi performa, mengurangi error, dan memastikan bahwa sistem rekomendasi bekerja dengan data yang bersih dan representatif.
 
+### 2. Content-Based Filtering
+Metode ini efektif dalam memberikan rekomendasi yang bersifat personal, terutama bagi pengguna baru yang belum banyak memberikan rating. Karena sistem merekomendasikan film berdasarkan konten (misalnya genre) yang disukai pengguna sebelumnya, maka rekomendasi tetap relevan walaupun tidak ada banyak data pengguna lain.
+
+### 3. Model-Based Collaborative Filtering (Deep Learning)
+Pendekatan ini memanfaatkan hubungan antar pengguna dalam memberikan rekomendasi. Dengan deep learning, sistem dapat menangkap pola kompleks dalam interaksi pengguna-item dan menghasilkan prediksi rating yang lebih akurat. Dampaknya adalah peningkatan relevansi rekomendasi bagi pengguna aktif dan kontribusi besar dalam menangani variasi selera pengguna yang luas.
+
+---
+
+# Referensi
+1.
+2.
+3.
+4.
+5. 
+6.
 
 
 
