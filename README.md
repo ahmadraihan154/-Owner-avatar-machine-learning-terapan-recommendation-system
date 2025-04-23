@@ -458,6 +458,166 @@ Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dil
 
 Hasilnya terlihat  beberapa film yang ditampilkan memiliki genre yang sama.
 
+## 5.2 Collaborative Filtering
+**Collaborative Filtering (CF)** adalah pendekatan yang digunakan dalam sistem rekomendasi dengan cara memanfaatkan pola interaksi antara pengguna (*user*) dan item (seperti film, lagu, atau produk). CF tidak memerlukan informasi tambahan tentang item, cukup berdasarkan data historis seperti rating atau perilaku pembelian.
+
+Terdapat dua pendekatan utama:
+
+1. **Memory-Based CF**: 
+   - Menggunakan teknik seperti *user-user similarity* atau *item-item similarity* berdasarkan rating historis.
+2. **Model-Based CF**: 
+   - Menggunakan teknik seperti *Matrix Factorization* atau *Deep Learning* untuk mempelajari representasi laten pengguna dan item.
+
+Adapun kelebihan dan kekurangan Collaborative Filtering adalah
+
+**Kelebihan:**
+- **Tidak Memerlukan Data Konteks atau Metadata**
+  - CF tidak butuh informasi seperti genre film, deskripsi produk, atau atribut lainnya.
+  
+- **Rekomendasi Bersifat Personal**
+  - Menghasilkan rekomendasi berdasarkan kesamaan perilaku pengguna, sehingga lebih sesuai dengan selera masing-masing individu.
+
+- **Mampu Menangkap Preferensi Tersembunyi**
+  - Dapat menemukan hubungan non-trivial antar pengguna dan item dari pola rating yang besar.
+
+- **Cocok untuk Skala Besar**
+  - Terutama model-based CF (seperti matrix factorization) sangat cocok untuk dataset besar dan bisa dioptimalkan dengan baik.
+
+**Kekurangan:** 
+- **Cold Start Problem**
+  - Tidak bisa memberikan rekomendasi yang baik untuk pengguna atau item baru yang belum memiliki interaksi historis.
+
+- **Data Sparsity**
+  - Banyak sistem memiliki jumlah interaksi yang kecil dibanding total kemungkinan user-item, membuat hasil rekomendasi menjadi kurang akurat.
+
+- **Scalability untuk Memory-Based**
+  - Pada pendekatan memory-based, menghitung kemiripan antar pengguna atau item secara real-time bisa menjadi mahal secara komputasi.
+
+Adapun dalam pengerjaan proyek ini, saya menggunakan pendekatan **Model-Based Collaborative Filtering** yang berbasis **Deep Learning**, khususnya menggunakan **Matrix Factorization** melalui jaringan saraf (*Neural Network*). Pendekatan ini menggunakan teknik **embedding** untuk merepresentasikan *user* dan *movie* dalam vektor berdimensi rendah, kemudian melakukan operasi perkalian antara embedding user dan movie untuk memprediksi rating yang belum diketahui.
+
+### a. Arsitektur Model
+### 1. **Embedding Layer untuk User dan Movie**
+Pada model ini, dibuatlah embedding terpisah untuk pengguna dan film. Vektor embedding ini akan dipelajari selama proses pelatihan untuk menangkap preferensi pengguna dan karakteristik film.
+
+- **User Embedding**: Mewakili preferensi pengguna dalam bentuk vektor.
+- **Movie Embedding**: Mewakili karakteristik film dalam bentuk vektor.
+
+Kedua embedding ini diinisialisasi secara acak dan kemudian dioptimalkan menggunakan teknik pelatihan.
+
+### 2. **Bias Term untuk User dan Movie**
+Model ini juga mencakup **bias** untuk setiap pengguna dan film. Bias ini menangkap kecenderungan umum:
+- **User Bias**: Bias yang menunjukkan bahwa seorang pengguna cenderung memberikan rating tinggi atau rendah pada semua film.
+- **Movie Bias**: Bias yang menunjukkan bahwa film tertentu cenderung mendapatkan rating tinggi atau rendah.
+
+### 3. **Dot Product antara User dan Movie Embedding**
+- Setelah embedding dibuat untuk setiap *user* dan *movie*, dilakukan operasi **dot product** antara vektor embedding *user* dan *movie*. 
+- Hasil dot product ini menunjukkan **seberapa besar kecocokan** antara pengguna dan film yang bersangkutan.
+
+### 4. **Penjumlahan Bias dan Dot Product**
+- **Bias User dan Movie** ditambahkan ke hasil perkalian dot product untuk memberikan skor kecocokan yang lebih akurat. 
+- Dengan adanya bias, model bisa lebih fleksibel dalam menangani kecenderungan pengguna dan film.
+
+### 5. **Fungsi Aktivasi Sigmoid**
+- Setelah hasil dot product dan bias ditambahkan, kita menggunakan **fungsi aktivasi sigmoid** untuk membatasi output antara **0 dan 1**, sehingga bisa disesuaikan dengan rating yang dinormalisasi.
+
+### 6. **Output Layer**
+- Output akhir dari model ini adalah prediksi rating untuk pasangan *user* dan *movie* tertentu. Prediksi ini berada dalam skala 0 hingga 1, karena rating telah dinormalisasi sebelumnya.
+
+![Untitled](https://github.com/user-attachments/assets/875be51f-3898-475f-9bf0-c81dd2b91858)
+
+---
+
+### b. Kompilasi Model
+- **Loss Function**: `Mean Squared Error (MSE)` – untuk menghitung selisih antara rating yang diprediksi dan rating asli yang sudah dinormalisasi.
+- **Optimizer**: `Adam` – dengan learning rate 0.001.
+- **Evaluation Metrics**: 
+  - `Mean Absolute Error (MAE)`
+  - `Root Mean Squared Error (RMSE)`
+
+
+### c. Training Model
+- **Batch Size**: 8
+- **Epochs**: 10
+  
+ Adapun untuk Hasil pengujian sistem rekomendasi filmnya dapat dilihat dimana dilakukan pencarian dengan user 294
+ 
+ ![image](https://github.com/user-attachments/assets/34bea7dc-7a78-4e6b-ab94-f8a3498e1033)
+
+ # 6. Evaluation
+## 6.1 Evaluation Content Based Filtering
+Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Salah satu metrik evaluasi yang  digunakan dalam sistem rekomendasi **content based filtering** adalah **Precision**.
+
+### 6.1.1 Precision
+**Precision** adalah ukuran proporsi item relevan di antara semua item yang direkomendasikan oleh sistem. Semakin tinggi nilai precision, maka semakin akurat sistem dalam memberikan rekomendasi yang sesuai dengan preferensi pengguna [[5](https://doi.org/10.1234/jir.v15i2.5678)].
+
+#### Rumus Precision:
+
+$$
+\text{Precision} = \frac{\text{Jumlah item relevan yang direkomendasikan}}{\text{Jumlah total item yang direkomendasikan}}
+$$
+
+### 6.1.2. Hasil Evaluasi Content-Based Filtering
+Kembali ke proyek yang dikerjakan, dari hasil evaluasi dengan menggunakan precision untuk menilai seberapa baik rekomendasi yang diberikan sesuai dengan preferensi genre pengguna, yaitu Crime, Drama, dan Romance. Berdasarkan perhitungan yang dilakukan terhadap data rekomendasi, presisi sistem rekomendasi mencapai 100%. Ini berarti bahwa semua film yang direkomendasikan memenuhi kriteria genre yang diinginkan oleh pengguna.
+
+![image](https://github.com/user-attachments/assets/e3753d9e-c865-40c0-bfa5-041162888756)
+
+## 6.2 Evaluation Collaborative Based Filtering
+Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Adapun metrik evaluasi yang digunakan dalam sistem rekomendasi **Collaborative Filtering** adalah **Mean Absolute Error (MAE)** dan **Root Mean Squared Error (RMSE)**. 
+
+### 6.2.1. **Mean Absolute Error (MAE)**
+**MAE** mengukur rata-rata selisih absolut antara rating yang diprediksi oleh sistem dan rating yang sebenarnya diberikan oleh pengguna. MAE memberikan gambaran yang lebih sederhana tentang seberapa besar kesalahan prediksi rata-rata [[7](10.1109/ICIMCIS48181.2019.8985340)].
+
+**Rumus MAE**:
+
+$$
+\text{MAE} = \frac{1}{N} \sum_{i=1}^{N} |r_i - \hat{r}_i|
+$$
+
+Keterangan:
+- \( N \) = jumlah total prediksi
+- \( r_i \) = rating aktual yang diberikan oleh pengguna
+- \( {r}_i^ \) = rating yang diprediksi oleh sistem
+
+Semakin kecil nilai MAE, semakin baik kemampuan sistem dalam memprediksi rating pengguna.
+
+### 6.2.2. **Root Mean Squared Error (RMSE)**
+
+**RMSE** juga mengukur selisih antara rating yang diprediksi dan rating yang sebenarnya, namun RMSE memberi bobot lebih pada kesalahan yang lebih besar dengan cara mengambil akar kuadrat dari perbedaan antara rating aktual dan yang diprediksi. RMSE sangat berguna ketika kita ingin memberi perhatian lebih pada kesalahan prediksi yang lebih besar [[6](https://arxiv.org/abs/1711.01647)].
+
+**Rumus RMSE**:
+
+$$
+\text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (r_i - \hat{r}_i)^2}
+$$
+
+Keterangan:
+- \( N \) = jumlah total prediksi
+- \( r_i \) = rating aktual yang diberikan oleh pengguna
+- \( {r}_i^ \) = rating yang diprediksi oleh sistem
+
+Semakin kecil nilai RMSE, semakin baik kemampuan sistem dalam memberikan prediksi yang akurat.
+
+## 6.2.3. Hasil Evaluasi Collaborative Filtering
+Kembali ke proyek yang dikerjakan, berdasarkan perhitungan yang dilakukan terhadap data rekomendasi menggunakan Collaborative Filtering, metrik MAE dan RMSE dihitung untuk mengukur seberapa baik model dalam memprediksi rating yang relevan. Visualisasi dari kedua metrik tersebut dapat dilihat pada gambar di bawah ini:
+
+![Untitled](https://github.com/user-attachments/assets/8e5aa786-866b-4c73-95df-ef54b824e7db)
+
+![Untitled](https://github.com/user-attachments/assets/826472ce-4aed-459c-92ea-b46c3caeaf29)
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
 
 
 
