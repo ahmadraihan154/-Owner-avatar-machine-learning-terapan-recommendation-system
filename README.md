@@ -237,7 +237,7 @@ Insight yang didapatkan dari barchart diatas adalah:
 
   - Beberapa "genre" seperti Carousel Productions, Aniplex, dan lainnya sebenarnya bukan genre, melainkan nama perusahaan produksi. Ini kemungkinan besar disebabkan oleh data yang belum dibersihkan atau salah kategorisasi. Ini menjadi sinyal bahwa perlu dilakukan data cleaning untuk memisahkan genre dari entitas lainnya seperti studio atau produser.
 
-### e. Analisis Rating dan Vote dari Masing-Masing Film
+### 3.3.5. Analisis Rating dan Vote dari Masing-Masing Film
 | Title                          | User Rating Mean | TMDb/IMDb Mean Rating | Total Vote |
 |-------------------------------|------------------|------------------------|------------|
 | Terminator 3: Rise of the Machines | 4.26             | 5.90                   | 324        |
