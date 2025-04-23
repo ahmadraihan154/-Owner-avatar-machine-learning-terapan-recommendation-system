@@ -569,7 +569,7 @@ Kembali ke proyek yang dikerjakan, dari hasil evaluasi dengan menggunakan precis
 Evaluasi kinerja sistem rekomendasi dilakukan untuk mengukur seberapa baik sistem dalam memberikan rekomendasi yang relevan dan sesuai dengan kebutuhan pengguna. Adapun metrik evaluasi yang digunakan dalam sistem rekomendasi **Collaborative Filtering** adalah **Mean Absolute Error (MAE)** dan **Root Mean Squared Error (RMSE)**. 
 
 ### 6.2.1. **Mean Absolute Error (MAE)**
-**MAE** mengukur rata-rata selisih absolut antara rating yang diprediksi oleh sistem dan rating yang sebenarnya diberikan oleh pengguna. MAE memberikan gambaran yang lebih sederhana tentang seberapa besar kesalahan prediksi rata-rata [[8](10.1109/ICIMCIS48181.2019.8985340)].
+**MAE** mengukur rata-rata selisih absolut antara rating yang diprediksi oleh sistem dan rating yang sebenarnya diberikan oleh pengguna. MAE memberikan gambaran yang lebih sederhana tentang seberapa besar kesalahan prediksi rata-rata [[8](https://ieeexplore.ieee.org/document/8985340)].
 
 **Rumus MAE**:
 
