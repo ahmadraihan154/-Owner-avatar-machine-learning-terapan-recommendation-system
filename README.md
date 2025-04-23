@@ -428,16 +428,6 @@ Pembagian ini dilakukan untuk memastikan model dapat dilatih dengan data yang cu
 
 Untuk mengukur kesamaan antar item (dalam hal ini film), digunakan teknik berbasis teks seperti **Cosine Similarity**. Teknik ini sangat berguna ketika fitur yang digunakan adalah teks, seperti genre yang telah diproses menjadi representasi numerik melalui **TF-IDF (Term Frequency - Inverse Document Frequency)**. Cosine Similarity mengukur seberapa mirip dua vektor dalam ruang multidimensi dengan menghitung sudut antara keduanya. Vektor yang arahnya semakin mendekati satu sama lain (sudutnya kecil) dianggap lebih mirip.
 
-#### Rumus Cosine Similarity:
-
-\[
-\text{Cosine Similarity}(A, B) = \frac{A \cdot B}{\|A\| \cdot \|B\|} = \frac{\sum_{i=1}^{n} A_i \times B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \times \sqrt{\sum_{i=1}^{n} B_i^2}}
-\]
-
-- Nilai cosine similarity berkisar antara 0 hingga 1:
-  - **1** → Sangat mirip (arah vektor sama)
-  - **0** → Tidak mirip sama sekali (arah tegak lurus)
-
 Adapun kelebihan dan kekurangan content-Based Filtering adalah
 
 **Kelebihan**:
