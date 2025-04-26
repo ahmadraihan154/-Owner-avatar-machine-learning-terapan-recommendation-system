@@ -51,7 +51,7 @@ Dataset yang digunakan dalam proyek ini adalah **The Movies Dataset**. Informasi
 
 | Jenis                  | Keterangan                             |
 |------------------------|-----------------------------------------|
-| **Sumber**             | Dataset: [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)                         |
+| **Sumber**             | [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)                         |
 | **Dataset Owner**      | Rounak Banik                            |
 | **Lisensi**            | CC0: Public Domain                      |
 | **Kategori**           | Movies & TV Shows                       |
